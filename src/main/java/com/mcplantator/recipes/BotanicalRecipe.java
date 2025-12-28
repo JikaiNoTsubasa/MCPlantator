@@ -68,7 +68,7 @@ public class BotanicalRecipe implements Recipe<Container> {
 
     @Override
     public @NotNull RecipeType<?> getType() {
-        return ModRecipes.BOTANICAL_TYPE;
+        return ModRecipes.BOTANICAL_TYPE.get();
     }
 
     @Override

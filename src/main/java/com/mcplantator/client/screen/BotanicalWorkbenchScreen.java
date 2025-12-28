@@ -2,10 +2,8 @@ package com.mcplantator.client.screen;
 
 import com.mcplantator.MCPlantator;
 import com.mcplantator.container.BotanicalWorkbenchMenu;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -22,18 +20,15 @@ public class BotanicalWorkbenchScreen extends AbstractContainerScreen<BotanicalW
         super(menu, playerInventory, title);
         this.imageHeight = 166;
         this.imageWidth = 176;
+        this.inventoryLabelY = this.imageHeight - 94;
     }
 
     @Override
     protected void renderBg(@NotNull GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, TEXTURE);
-
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
 
-        guiGraphics.blit(TEXTURE, x, y, 0, 0, imageWidth, imageHeight);
+        guiGraphics.blit(TEXTURE, x, y, 0, 0, this.imageWidth, this.imageHeight, this.imageWidth, this.imageHeight);
     }
 
     @Override
@@ -41,5 +36,12 @@ public class BotanicalWorkbenchScreen extends AbstractContainerScreen<BotanicalW
         renderBackground(guiGraphics);
         super.render(guiGraphics, mouseX, mouseY, partialTick);
         renderTooltip(guiGraphics, mouseX, mouseY);
+    }
+
+    @Override
+    protected void init() {
+        super.init();
+        // Centrer le titre
+        this.titleLabelX = (this.imageWidth - this.font.width(this.title)) / 2;
     }
 }

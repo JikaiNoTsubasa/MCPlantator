@@ -33,28 +33,31 @@ import java.util.Optional;
  * Handles inventory (2 input slots + 1 output slot) and recipe checking.
  */
 public class BotanicalWorkbenchBlockEntity extends BlockEntity implements MenuProvider {
+    private boolean isCheckingRecipe = false;
+    private boolean isExtracting = false;
+
     private final ItemStackHandler itemHandler = new ItemStackHandler(3) {
         @Override
         protected void onContentsChanged(int slot) {
             setChanged();
-            if (level != null && !level.isClientSide()) {
+            if (level != null && !level.isClientSide() && !isCheckingRecipe && !isExtracting) {
                 checkRecipe();
             }
         }
 
         @Override
         public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-            // Slot 2 is output only
-            return slot != 2;
+            // Slot 0 (top): anything
+            // Slot 1 (bottom): only bone meal
+            // Slot 2 (output): nothing
+            if (slot == 2) return false;
+            if (slot == 1) return stack.is(net.minecraft.world.item.Items.BONE_MEAL);
+            return true;
         }
 
         @Override
         public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
-            // When extracting from output slot, consume input items
-            if (slot == 2 && !simulate) {
-                itemHandler.extractItem(0, 1, false);
-                itemHandler.extractItem(1, 1, false);
-            }
+            // Just do normal extraction - consumption will be handled in onTake()
             return super.extractItem(slot, amount, simulate);
         }
     };
@@ -123,21 +126,26 @@ public class BotanicalWorkbenchBlockEntity extends BlockEntity implements MenuPr
         // Recipe checking is done on inventory change
     }
 
-    private void checkRecipe() {
-        if (level == null) return;
+    public void checkRecipe() {
+        if (level == null || isCheckingRecipe) return;
 
-        SimpleContainer inventory = new SimpleContainer(2);
-        inventory.setItem(0, itemHandler.getStackInSlot(0));
-        inventory.setItem(1, itemHandler.getStackInSlot(1));
+        isCheckingRecipe = true;
+        try {
+            SimpleContainer inventory = new SimpleContainer(2);
+            inventory.setItem(0, itemHandler.getStackInSlot(0));
+            inventory.setItem(1, itemHandler.getStackInSlot(1));
 
-        Optional<BotanicalRecipe> recipe = level.getRecipeManager()
-                .getRecipeFor(ModRecipes.BOTANICAL_TYPE, inventory, level);
+            Optional<BotanicalRecipe> recipe = level.getRecipeManager()
+                    .getRecipeFor(ModRecipes.BOTANICAL_TYPE.get(), inventory, level);
 
-        if (recipe.isPresent()) {
-            ItemStack result = recipe.get().getResultItem(level.registryAccess());
-            itemHandler.setStackInSlot(2, result.copy());
-        } else {
-            itemHandler.setStackInSlot(2, ItemStack.EMPTY);
+            if (recipe.isPresent()) {
+                ItemStack result = recipe.get().getResultItem(level.registryAccess());
+                itemHandler.setStackInSlot(2, result.copy());
+            } else {
+                itemHandler.setStackInSlot(2, ItemStack.EMPTY);
+            }
+        } finally {
+            isCheckingRecipe = false;
         }
     }
 

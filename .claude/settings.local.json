@@ -3,7 +3,12 @@
     "allow": [
       "Bash(tree:*)",
       "Bash(ls:*)",
-      "Bash(where:*)"
+      "Bash(where:*)",
+      "Bash(./gradlew compileJava:*)",
+      "Bash(gradlew.bat clean build:*)",
+      "Bash(.gradlew.bat clean build)",
+      "Bash(cmd /c \"cd /d c:\\\\Users\\\\biehler_s2i-evolutio\\\\Documents\\\\Projects\\\\Perso\\\\MinecraftMods\\\\MCPlantator && gradlew.bat clean build\")",
+      "Bash(cmd /c \"dir c:\\\\Users\\\\biehler_s2i-evolutio\\\\Documents\\\\Projects\\\\Perso\\\\MinecraftMods\\\\MCPlantator\\\\gradlew.bat\")"
     ]
   }
 }

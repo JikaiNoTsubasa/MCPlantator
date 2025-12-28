@@ -86,16 +86,16 @@ public class GunpowderCropBlock extends CropBlock {
         BlockPos southPos = pos.south();
         BlockPos westPos = pos.west();
         BlockPos eastPos = pos.east();
-        boolean xAxis = level.getBlockState(westPos).is(this) || level.getBlockState(eastPos).is(this);
-        boolean zAxis = level.getBlockState(northPos).is(this) || level.getBlockState(southPos).is(this);
+        boolean xAxis = level.getBlockState(westPos).is(block) || level.getBlockState(eastPos).is(block);
+        boolean zAxis = level.getBlockState(northPos).is(block) || level.getBlockState(southPos).is(block);
 
         if (xAxis && zAxis) {
             speed /= 2.0F;
         } else {
-            boolean diagonals = level.getBlockState(westPos.north()).is(this) ||
-                               level.getBlockState(eastPos.north()).is(this) ||
-                               level.getBlockState(eastPos.south()).is(this) ||
-                               level.getBlockState(westPos.south()).is(this);
+            boolean diagonals = level.getBlockState(westPos.north()).is(block) ||
+                               level.getBlockState(eastPos.north()).is(block) ||
+                               level.getBlockState(eastPos.south()).is(block) ||
+                               level.getBlockState(westPos.south()).is(block);
             if (diagonals) {
                 speed /= 2.0F;
             }

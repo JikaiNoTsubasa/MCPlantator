@@ -50,6 +50,25 @@ public class BotanicalWorkbenchMenu extends AbstractContainerMenu {
             public boolean mayPlace(@NotNull ItemStack stack) {
                 return false; // Output slot, cannot place items
             }
+
+            @Override
+            public void onTake(net.minecraft.world.entity.player.Player player, ItemStack stack) {
+                // Consume input items for each output item taken
+                if (level != null && !level.isClientSide()) {
+                    net.minecraftforge.items.IItemHandler handler = blockEntity.getItemHandler();
+                    // Consume 1 from each input slot
+                    handler.extractItem(0, 1, false);
+                    handler.extractItem(1, 1, false);
+                    // Check if new recipe is possible
+                    blockEntity.checkRecipe();
+                }
+                super.onTake(player, stack);
+            }
+
+            @Override
+            public int getMaxStackSize() {
+                return 1;
+            }
         });
     }
 
@@ -62,15 +81,33 @@ public class BotanicalWorkbenchMenu extends AbstractContainerMenu {
             ItemStack slotStack = slot.getItem();
             itemstack = slotStack.copy();
 
-            // From custom slots to player inventory
-            if (index < 36) {
-                if (!this.moveItemStackTo(slotStack, 36, this.slots.size(), true)) {
+            // Slot indices: 0-35 = player inventory, 36-37 = input slots, 38 = output slot
+            final int PLAYER_INV_START = 0;
+            final int PLAYER_INV_END = 36;
+            final int INPUT_SLOTS_START = 36;
+            final int INPUT_SLOTS_END = 38;
+            final int OUTPUT_SLOT = 38;
+
+            // If shift-clicking the output slot
+            if (index == OUTPUT_SLOT) {
+                // Try to move to player inventory
+                if (!this.moveItemStackTo(slotStack, PLAYER_INV_START, PLAYER_INV_END, true)) {
+                    return ItemStack.EMPTY;
+                }
+                // Trigger recipe consumption
+                slot.onQuickCraft(slotStack, itemstack);
+            }
+            // From player inventory to input slots
+            else if (index >= PLAYER_INV_START && index < PLAYER_INV_END) {
+                if (!this.moveItemStackTo(slotStack, INPUT_SLOTS_START, INPUT_SLOTS_END, false)) {
                     return ItemStack.EMPTY;
                 }
             }
-            // From player inventory to custom slots
-            else if (!this.moveItemStackTo(slotStack, 0, 36, false)) {
-                return ItemStack.EMPTY;
+            // From input slots to player inventory
+            else if (index >= INPUT_SLOTS_START && index < INPUT_SLOTS_END) {
+                if (!this.moveItemStackTo(slotStack, PLAYER_INV_START, PLAYER_INV_END, true)) {
+                    return ItemStack.EMPTY;
+                }
             }
 
             if (slotStack.isEmpty()) {

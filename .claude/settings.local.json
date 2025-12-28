@@ -8,7 +8,12 @@
       "Bash(gradlew.bat clean build:*)",
       "Bash(.gradlew.bat clean build)",
       "Bash(cmd /c \"cd /d c:\\\\Users\\\\biehler_s2i-evolutio\\\\Documents\\\\Projects\\\\Perso\\\\MinecraftMods\\\\MCPlantator && gradlew.bat clean build\")",
-      "Bash(cmd /c \"dir c:\\\\Users\\\\biehler_s2i-evolutio\\\\Documents\\\\Projects\\\\Perso\\\\MinecraftMods\\\\MCPlantator\\\\gradlew.bat\")"
+      "Bash(cmd /c \"dir c:\\\\Users\\\\biehler_s2i-evolutio\\\\Documents\\\\Projects\\\\Perso\\\\MinecraftMods\\\\MCPlantator\\\\gradlew.bat\")",
+      "Bash(dir:*)",
+      "Bash(cmd /c \"dir gradle\\\\wrapper /b\")",
+      "Bash(powershell -Command \"Invoke-WebRequest -Uri ''https://raw.githubusercontent.com/gradle/gradle/v8.1.1/gradle/wrapper/gradle-wrapper.jar'' -OutFile ''gradle/wrapper/gradle-wrapper.jar''\")",
+      "Bash(cmd /c \"gradlew.bat --version\")",
+      "Bash(./gradlew.bat:*)"
     ]
   }
 }

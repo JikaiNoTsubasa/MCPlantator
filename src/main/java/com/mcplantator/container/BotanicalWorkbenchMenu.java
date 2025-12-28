@@ -90,12 +90,44 @@ public class BotanicalWorkbenchMenu extends AbstractContainerMenu {
 
             // If shift-clicking the output slot
             if (index == OUTPUT_SLOT) {
-                // Try to move to player inventory
-                if (!this.moveItemStackTo(slotStack, PLAYER_INV_START, PLAYER_INV_END, true)) {
+                // Calculate max craftable items based on available ingredients
+                IItemHandler handler = blockEntity.getItemHandler();
+                int ingredient1Count = handler.getStackInSlot(0).getCount();
+                int ingredient2Count = handler.getStackInSlot(1).getCount();
+                int maxCraftable = Math.min(ingredient1Count, ingredient2Count);
+
+                if (maxCraftable <= 0 || !slot.hasItem()) {
                     return ItemStack.EMPTY;
                 }
-                // Trigger recipe consumption
-                slot.onQuickCraft(slotStack, itemstack);
+
+                // Create stack with all craftable items
+                ItemStack resultToCraft = slotStack.copy();
+                resultToCraft.setCount(maxCraftable);
+
+                // Try to add all crafted items to player inventory at once
+                ItemStack remainder = resultToCraft.copy();
+                if (!this.moveItemStackTo(remainder, PLAYER_INV_START, PLAYER_INV_END, true)) {
+                    return ItemStack.EMPTY;
+                }
+
+                // Calculate how many were actually moved (remainder might not be empty if inventory was full)
+                int actualCrafted = maxCraftable - remainder.getCount();
+
+                if (actualCrafted > 0) {
+                    // Consume ingredients for all crafted items at once (server side only)
+                    if (level != null && !level.isClientSide()) {
+                        handler.extractItem(0, actualCrafted, false);
+                        handler.extractItem(1, actualCrafted, false);
+                        // Update recipe once at the end
+                        blockEntity.checkRecipe();
+                    }
+
+                    // Clear the output slot since we handled everything manually
+                    slot.set(ItemStack.EMPTY);
+                }
+
+                itemstack = resultToCraft.copy();
+                itemstack.setCount(actualCrafted);
             }
             // From player inventory to input slots
             else if (index >= PLAYER_INV_START && index < PLAYER_INV_END) {

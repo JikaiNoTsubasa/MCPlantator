@@ -1,0 +1,13 @@
+{
+  "type": "mcplantator:botanical",
+  "ingredient_top": {
+    "item": "minecraft:gunpowder"
+  },
+  "ingredient_bottom": {
+    "item": "minecraft:bone_meal"
+  },
+  "result": {
+    "item": "mcplantator:gunpowder_seed",
+    "count": 1
+  }
+}

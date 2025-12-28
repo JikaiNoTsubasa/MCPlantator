@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "mcplantator:block/gunpowder_crop_stage5"
+  }
+}

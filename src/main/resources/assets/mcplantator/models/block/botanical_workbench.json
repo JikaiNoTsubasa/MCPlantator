@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "mcplantator:block/botanical_workbench_front",
+    "down": "mcplantator:block/botanical_workbench_top",
+    "up": "mcplantator:block/botanical_workbench_top",
+    "north": "mcplantator:block/botanical_workbench_front",
+    "south": "mcplantator:block/botanical_workbench_side",
+    "west": "mcplantator:block/botanical_workbench_side",
+    "east": "mcplantator:block/botanical_workbench_side"
+  }
+}

@@ -7,6 +7,7 @@ import com.mcplantator.init.ModMenuTypes;
 import com.mcplantator.init.ModRecipes;
 import com.mcplantator.init.ModCreativeTabs;
 import com.mojang.logging.LogUtils;
+import net.minecraft.world.level.block.ComposterBlock;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
@@ -40,6 +41,11 @@ public class MCPlantator {
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
+        event.enqueueWork(() -> {
+            // Register compostable items
+            ComposterBlock.COMPOSTABLES.put(ModItems.GUNPOWDER_SEED.get(), 0.3F);
+        });
+
         LOGGER.info("MCPlantator common setup complete!");
     }
 }

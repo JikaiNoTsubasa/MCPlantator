@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:block/cross",
+  "parent": "minecraft:block/crop",
   "textures": {
-    "cross": "mcplantator:block/gunpowder_crop_stage7"
+    "crop": "mcplantator:block/gunpowder_crop_stage7"
   }
 }

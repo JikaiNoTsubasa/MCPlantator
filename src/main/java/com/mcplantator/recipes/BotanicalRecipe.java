@@ -1,13 +1,9 @@
 package com.mcplantator.recipes;
 
-import com.google.gson.JsonObject;
-import com.mcplantator.MCPlantator;
 import com.mcplantator.init.ModRecipes;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;

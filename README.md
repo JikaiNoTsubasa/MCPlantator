@@ -17,7 +17,7 @@ Cultivez votre propre poudre à canon !
 
 ### Établi Botanique
 Un nouvel établi pour créer des graines de plantes spéciales.
-- **Recette :** Planches + Crafting Table
+- **Recette :** 3 Planches de Chêne + 5 Planches + Crafting Table
 - **Utilisation :** Gun Powder + Bone Meal = Graine Poudrière
 - Interface graphique intuitive
 
@@ -42,10 +42,11 @@ Un nouvel établi pour créer des graines de plantes spéciales.
 
 ### Fabriquer l'Établi Botanique
 ```
-Planches  Planches  Planches
-Planches   Table    Planches
-Planches  Planches  Planches
+Oak Planks    Oak Planks    Oak Planks
+Planches      Table         Planches
+Planches      Planches      Planches
 ```
+Note : La première rangée doit être en planches de chêne, les autres peuvent être n'importe quelles planches.
 
 ### Créer des Graines Poudrières
 1. Placer l'**Établi Botanique** dans le monde

@@ -2,6 +2,7 @@ package com.mcplantator.client;
 
 import com.mcplantator.MCPlantator;
 import com.mcplantator.client.screen.BotanicalWorkbenchScreen;
+import com.mcplantator.client.screen.IronExtractorScreen;
 import com.mcplantator.init.ModBlocks;
 import com.mcplantator.init.ModMenuTypes;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -18,6 +19,7 @@ public class ClientSetup {
     public static void onClientSetup(FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
             MenuScreens.register(ModMenuTypes.BOTANICAL_WORKBENCH.get(), BotanicalWorkbenchScreen::new);
+            MenuScreens.register(ModMenuTypes.IRON_EXTRACTOR.get(), IronExtractorScreen::new);
 
             // Set render layer for transparent textures
             ItemBlockRenderTypes.setRenderLayer(ModBlocks.GUNPOWDER_CROP.get(), RenderType.cutout());

@@ -21,6 +21,7 @@ public class ModCreativeTabs {
                         // Add all mod items to the creative tab
                         output.accept(ModItems.GUNPOWDER_SEED.get());
                         output.accept(ModBlocks.BOTANICAL_WORKBENCH_ITEM.get());
+                        output.accept(ModBlocks.IRON_EXTRACTOR_ITEM.get());
                     })
                     .build());
 

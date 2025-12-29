@@ -2,6 +2,7 @@ package com.mcplantator.init;
 
 import com.mcplantator.MCPlantator;
 import com.mcplantator.container.BotanicalWorkbenchMenu;
+import com.mcplantator.menu.IronExtractorMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -16,6 +17,10 @@ public class ModMenuTypes {
     public static final RegistryObject<MenuType<BotanicalWorkbenchMenu>> BOTANICAL_WORKBENCH =
         MENUS.register("botanical_workbench", () ->
             IForgeMenuType.create(BotanicalWorkbenchMenu::new));
+
+    public static final RegistryObject<MenuType<IronExtractorMenu>> IRON_EXTRACTOR =
+        MENUS.register("iron_extractor", () ->
+            IForgeMenuType.create(IronExtractorMenu::new));
 
     public static void register(IEventBus eventBus) {
         MENUS.register(eventBus);

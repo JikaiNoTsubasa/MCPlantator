@@ -2,6 +2,8 @@
   "item.mcplantator.gunpowder_seed": "Gunpowder Seed",
   "block.mcplantator.gunpowder_crop": "Gunpowder Plant",
   "block.mcplantator.botanical_workbench": "Botanical Workbench",
+  "block.mcplantator.iron_extractor": "Iron Extractor",
   "container.mcplantator.botanical_workbench": "Botanical Workbench",
+  "container.mcplantator.iron_extractor": "Iron Extractor",
   "itemGroup.mcplantator": "MCPlantator"
 }

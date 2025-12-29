@@ -3,6 +3,7 @@ package com.mcplantator.init;
 import com.mcplantator.MCPlantator;
 import com.mcplantator.blocks.BotanicalWorkbenchBlock;
 import com.mcplantator.blocks.GunpowderCropBlock;
+import com.mcplantator.blocks.IronExtractorBlock;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -25,10 +26,20 @@ public class ModBlocks {
     public static final RegistryObject<Block> BOTANICAL_WORKBENCH = BLOCKS.register("botanical_workbench",
             () -> new BotanicalWorkbenchBlock(BlockBehaviour.Properties.copy(Blocks.CRAFTING_TABLE)));
 
+    // Iron Extractor
+    public static final RegistryObject<Block> IRON_EXTRACTOR = BLOCKS.register("iron_extractor",
+            () -> new IronExtractorBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
+                    .strength(3.5F)
+                    .requiresCorrectToolForDrops()));
+
     // Block items
     public static final RegistryObject<Item> BOTANICAL_WORKBENCH_ITEM =
         ModItems.ITEMS.register("botanical_workbench",
             () -> new BlockItem(BOTANICAL_WORKBENCH.get(), new Item.Properties()));
+
+    public static final RegistryObject<Item> IRON_EXTRACTOR_ITEM =
+        ModItems.ITEMS.register("iron_extractor",
+            () -> new BlockItem(IRON_EXTRACTOR.get(), new Item.Properties()));
 
     public static void register(IEventBus eventBus) {
         BLOCKS.register(eventBus);

@@ -30,7 +30,8 @@ public class ModBlocks {
     public static final RegistryObject<Block> IRON_EXTRACTOR = BLOCKS.register("iron_extractor",
             () -> new IronExtractorBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
                     .strength(3.5F)
-                    .requiresCorrectToolForDrops()));
+                    .requiresCorrectToolForDrops()
+                    .noOcclusion()));
 
     // Block items
     public static final RegistryObject<Item> BOTANICAL_WORKBENCH_ITEM =

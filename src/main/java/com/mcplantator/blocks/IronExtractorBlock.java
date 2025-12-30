@@ -4,12 +4,14 @@ import com.mcplantator.blockentities.IronExtractorBlockEntity;
 import com.mcplantator.init.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -23,6 +25,7 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 
 /**
  * Iron Extractor Block - processes cobblestone to extract iron nuggets
@@ -102,19 +105,92 @@ public class IronExtractorBlock extends BaseEntityBlock {
         builder.add(FACING, LIT);
     }
 
-    // Fix for transparent adjacent faces
     @Override
-    public boolean useShapeForLightOcclusion(BlockState state) {
-        return true;
+    public int getLightEmission(BlockState state, net.minecraft.world.level.BlockGetter level, BlockPos pos) {
+        return state.getValue(LIT) ? 13 : 0;
     }
 
     @Override
-    public boolean propagatesSkylightDown(BlockState state, net.minecraft.world.level.BlockGetter reader, BlockPos pos) {
-        return false;
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+        if (state.getValue(LIT)) {
+            Direction facing = state.getValue(FACING);
+
+            // Randomly spawn redstone particles at specific coordinates (x=8-11, z=4, y=0 in pixel coordinates)
+            if (random.nextDouble() < 0.3D) {
+                // Random X between 8 and 11 pixels (in local block coordinates)
+                double localX = (8.0D + random.nextDouble() * 3.0D) / 16.0D; // 8-11 pixels
+                double localY = 0.0D / 16.0D;                                 // 0 pixels (base)
+                double localZ = 4.0D / 16.0D;                                 // 4 pixels
+
+                // Transform coordinates based on block rotation
+                double[] worldCoords = transformCoordinates(localX, localZ, facing);
+
+                // Create redstone dust particle (red color)
+                DustParticleOptions dustOptions = new DustParticleOptions(
+                    new Vector3f(1.0F, 0.0F, 0.0F), // RGB color (red)
+                    1.0F // Size
+                );
+
+                level.addParticle(dustOptions,
+                    pos.getX() + worldCoords[0],
+                    pos.getY() + localY,
+                    pos.getZ() + worldCoords[1],
+                    0.0D, 0.02D, 0.0D); // Small upward velocity
+            }
+
+            // Smoke particles at specific coordinates (x=3, z=8, y=10 in pixel coordinates)
+            if (random.nextDouble() < 0.5D) {
+                // Local coordinates in pixels
+                double localX = 3.0D / 16.0D;   // 3 pixels
+                double localY = 10.0D / 16.0D;  // 10 pixels
+                double localZ = 8.0D / 16.0D;   // 8 pixels
+
+                // Transform coordinates based on block rotation
+                double[] worldCoords = transformCoordinates(localX, localZ, facing);
+
+                // Add campfire-style smoke that rises upward
+                level.addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE,
+                    pos.getX() + worldCoords[0],
+                    pos.getY() + localY,
+                    pos.getZ() + worldCoords[1],
+                    0.0D, 0.07D, 0.0D); // Upward velocity
+            }
+        }
     }
 
-    @Override
-    public int getLightBlock(BlockState state, BlockGetter level, BlockPos pos) {
-        return 15;
+    /**
+     * Transform local block coordinates to world coordinates based on block rotation
+     * @param localX X coordinate in block space (0.0-1.0)
+     * @param localZ Z coordinate in block space (0.0-1.0)
+     * @param facing Block facing direction
+     * @return [worldX, worldZ] transformed coordinates
+     */
+    private double[] transformCoordinates(double localX, double localZ, Direction facing) {
+        double worldX, worldZ;
+
+        switch (facing) {
+            case NORTH: // Default orientation (0°)
+                worldX = localX;
+                worldZ = localZ;
+                break;
+            case SOUTH: // 180° rotation
+                worldX = 1.0D - localX;
+                worldZ = 1.0D - localZ;
+                break;
+            case WEST: // 90° counter-clockwise
+                worldX = localZ;
+                worldZ = 1.0D - localX;
+                break;
+            case EAST: // 90° clockwise
+                worldX = 1.0D - localZ;
+                worldZ = localX;
+                break;
+            default:
+                worldX = localX;
+                worldZ = localZ;
+                break;
+        }
+
+        return new double[]{worldX, worldZ};
     }
 }

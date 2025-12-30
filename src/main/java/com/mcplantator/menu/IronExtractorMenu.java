@@ -102,7 +102,7 @@ public class IronExtractorMenu extends AbstractContainerMenu {
             newStack = originalStack.copy();
 
             // Slots: 0-35 = player inventory, 36 = input, 37 = fuel, 38-42 = output
-            int containerSlots = IronExtractorBlockEntity.TOTAL_SLOTS;
+            // int containerSlots = IronExtractorBlockEntity.TOTAL_SLOTS;
             int playerInventoryEnd = 36;
 
             if (index >= playerInventoryEnd) {

@@ -34,7 +34,9 @@ public class IronExtractorScreen extends AbstractContainerScreen<IronExtractorMe
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
 
-        guiGraphics.blit(TEXTURE, x, y, 0, 0, this.imageWidth, this.imageHeight, this.imageWidth, this.imageHeight);
+        // Render only the visible part (176×166) from the texture
+        // Texture size is 208×166 (includes the animated sprites zone)
+        guiGraphics.blit(TEXTURE, x, y, 0, 0, this.imageWidth, this.imageHeight, 208, 166);
 
         renderProgressArrow(guiGraphics, x, y);
         renderFuelBar(guiGraphics, x, y);
@@ -43,14 +45,18 @@ public class IronExtractorScreen extends AbstractContainerScreen<IronExtractorMe
     private void renderProgressArrow(GuiGraphics guiGraphics, int x, int y) {
         if (menu.isCrafting()) {
             int progress = menu.getScaledProgress();
-            guiGraphics.blit(TEXTURE, x + 80, y + 35, 176, 0, 16, progress);
+            // Arrow goes from left to right (horizontal)
+            // Sprite starts at x=177 in the texture
+            guiGraphics.blit(TEXTURE, x + 80, y + 35, 177, 0, progress, 16, 208, 166);
         }
     }
 
     private void renderFuelBar(GuiGraphics guiGraphics, int x, int y) {
         int fuelProgress = menu.getScaledFuelProgress();
         if (fuelProgress > 0) {
-            guiGraphics.blit(TEXTURE, x + 57, y + 37 + (14 - fuelProgress), 176, 14 - fuelProgress, 14, fuelProgress + 1);
+            // Fuel bar goes from bottom to top (vertical)
+            // Sprite starts at x=177, y=16 in the texture
+            guiGraphics.blit(TEXTURE, x + 56, y + 36 + (14 - fuelProgress), 177, 16 + (14 - fuelProgress), 14, fuelProgress, 208, 166);
         }
     }
 

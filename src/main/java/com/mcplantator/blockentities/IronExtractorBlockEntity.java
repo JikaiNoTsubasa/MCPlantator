@@ -24,6 +24,7 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.wrapper.RangedWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,8 +37,8 @@ public class IronExtractorBlockEntity extends BlockEntity implements MenuProvide
     public static final int INPUT_SLOT = 0;
     public static final int FUEL_SLOT = 1;
     public static final int OUTPUT_SLOT_START = 2;
-    public static final int OUTPUT_SLOT_COUNT = 5;
-    public static final int TOTAL_SLOTS = 7;
+    public static final int OUTPUT_SLOT_COUNT = 3;
+    public static final int TOTAL_SLOTS = 5;
 
     // Processing constants
     private static final int PROCESS_TIME = 200; // 10 seconds (200 ticks)
@@ -63,6 +64,8 @@ public class IronExtractorBlockEntity extends BlockEntity implements MenuProvide
     };
 
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
+    private LazyOptional<IItemHandler> lazyInputHandler = LazyOptional.empty();
+    private LazyOptional<IItemHandler> lazyOutputHandler = LazyOptional.empty();
 
     // Processing data
     private int progress = 0;
@@ -113,7 +116,15 @@ public class IronExtractorBlockEntity extends BlockEntity implements MenuProvide
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
         if (cap == ForgeCapabilities.ITEM_HANDLER) {
-            return lazyItemHandler.cast();
+            if (side == null) {
+                return lazyItemHandler.cast();
+            } else if (side == Direction.UP) {
+                // Top: can insert into input and fuel slots
+                return lazyInputHandler.cast();
+            } else {
+                // Bottom/Sides: can only extract from output slots
+                return lazyOutputHandler.cast();
+            }
         }
         return super.getCapability(cap, side);
     }
@@ -122,12 +133,18 @@ public class IronExtractorBlockEntity extends BlockEntity implements MenuProvide
     public void onLoad() {
         super.onLoad();
         lazyItemHandler = LazyOptional.of(() -> itemHandler);
+        // Input handler: slots 0-1 (input + fuel) - for inserting from top
+        lazyInputHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, INPUT_SLOT, FUEL_SLOT + 1));
+        // Output handler: slots 2-4 (output only) - for extracting from bottom/sides
+        lazyOutputHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, OUTPUT_SLOT_START, OUTPUT_SLOT_START + OUTPUT_SLOT_COUNT));
     }
 
     @Override
     public void invalidateCaps() {
         super.invalidateCaps();
         lazyItemHandler.invalidate();
+        lazyInputHandler.invalidate();
+        lazyOutputHandler.invalidate();
     }
 
     @Override

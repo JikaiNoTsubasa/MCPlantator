@@ -30,7 +30,12 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Iron Extractor Block Entity
- * Processes cobblestone with redstone fuel to extract iron nuggets (90% chance)
+ * Processes cobblestone/cobbled deepslate with redstone fuel to extract iron nuggets (90% chance)
+ *
+ * Hopper Configuration:
+ * - Sides (North/South/East/West): Insert cobblestone/cobbled deepslate AND redstone
+ * - Top: No hopper interaction
+ * - Bottom: Extract iron nuggets (output)
  */
 public class IronExtractorBlockEntity extends BlockEntity implements MenuProvider {
     // Slots: 0=input(cobble), 1=fuel(redstone), 2-6=output(iron nuggets)
@@ -54,7 +59,7 @@ public class IronExtractorBlockEntity extends BlockEntity implements MenuProvide
         @Override
         public boolean isItemValid(int slot, @NotNull ItemStack stack) {
             if (slot == INPUT_SLOT) {
-                return stack.is(Items.COBBLESTONE);
+                return stack.is(Items.COBBLESTONE) || stack.is(Items.COBBLED_DEEPSLATE);
             } else if (slot == FUEL_SLOT) {
                 return stack.is(Items.REDSTONE);
             } else {
@@ -65,6 +70,7 @@ public class IronExtractorBlockEntity extends BlockEntity implements MenuProvide
 
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
     private LazyOptional<IItemHandler> lazyInputHandler = LazyOptional.empty();
+    private LazyOptional<IItemHandler> lazyFuelHandler = LazyOptional.empty();
     private LazyOptional<IItemHandler> lazyOutputHandler = LazyOptional.empty();
 
     // Processing data
@@ -118,12 +124,15 @@ public class IronExtractorBlockEntity extends BlockEntity implements MenuProvide
         if (cap == ForgeCapabilities.ITEM_HANDLER) {
             if (side == null) {
                 return lazyItemHandler.cast();
-            } else if (side == Direction.UP) {
-                // Top: can insert into input and fuel slots
-                return lazyInputHandler.cast();
-            } else {
-                // Bottom/Sides: can only extract from output slots
+            } else if (side == Direction.DOWN) {
+                // Bottom: can only extract from output slots
                 return lazyOutputHandler.cast();
+            } else if (side == Direction.UP) {
+                // Top: no hopper interaction
+                return super.getCapability(cap, side);
+            } else {
+                // Sides: can insert into input and fuel slots (cobblestone + redstone)
+                return lazyInputHandler.cast();
             }
         }
         return super.getCapability(cap, side);
@@ -133,9 +142,11 @@ public class IronExtractorBlockEntity extends BlockEntity implements MenuProvide
     public void onLoad() {
         super.onLoad();
         lazyItemHandler = LazyOptional.of(() -> itemHandler);
-        // Input handler: slots 0-1 (input + fuel) - for inserting from top
+        // Input handler: slots 0-1 (input + fuel: cobblestone + redstone) - for inserting from sides
         lazyInputHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, INPUT_SLOT, FUEL_SLOT + 1));
-        // Output handler: slots 2-4 (output only) - for extracting from bottom/sides
+        // Fuel handler: not used anymore but kept for compatibility
+        lazyFuelHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, FUEL_SLOT, FUEL_SLOT + 1));
+        // Output handler: slots 2-4 (output only) - for extracting from bottom
         lazyOutputHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, OUTPUT_SLOT_START, OUTPUT_SLOT_START + OUTPUT_SLOT_COUNT));
     }
 
@@ -144,6 +155,7 @@ public class IronExtractorBlockEntity extends BlockEntity implements MenuProvide
         super.invalidateCaps();
         lazyItemHandler.invalidate();
         lazyInputHandler.invalidate();
+        lazyFuelHandler.invalidate();
         lazyOutputHandler.invalidate();
     }
 
@@ -215,7 +227,7 @@ public class IronExtractorBlockEntity extends BlockEntity implements MenuProvide
 
     private boolean canProcess() {
         ItemStack input = itemHandler.getStackInSlot(INPUT_SLOT);
-        if (input.isEmpty() || !input.is(Items.COBBLESTONE)) {
+        if (input.isEmpty() || (!input.is(Items.COBBLESTONE) && !input.is(Items.COBBLED_DEEPSLATE))) {
             return false;
         }
 

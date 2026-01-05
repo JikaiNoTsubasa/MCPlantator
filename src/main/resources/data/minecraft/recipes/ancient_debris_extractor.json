@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "NNN",
+    "NBN",
+    "NPN"
+  ],
+  "key": {
+    "N": {
+      "item": "minecraft:nether_bricks"
+    },
+    "B": {
+      "item": "minecraft:blast_furnace"
+    },
+    "P": {
+      "item": "minecraft:netherite_scrap"
+    }
+  },
+  "result": {
+    "item": "mcplantator:ancient_debris_extractor",
+    "count": 1
+  }
+}

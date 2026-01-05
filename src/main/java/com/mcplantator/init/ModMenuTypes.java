@@ -2,6 +2,7 @@ package com.mcplantator.init;
 
 import com.mcplantator.MCPlantator;
 import com.mcplantator.container.BotanicalWorkbenchMenu;
+import com.mcplantator.menu.AncientDebrisExtractorMenu;
 import com.mcplantator.menu.IronExtractorMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.common.extensions.IForgeMenuType;
@@ -21,6 +22,10 @@ public class ModMenuTypes {
     public static final RegistryObject<MenuType<IronExtractorMenu>> IRON_EXTRACTOR =
         MENUS.register("iron_extractor", () ->
             IForgeMenuType.create(IronExtractorMenu::new));
+
+    public static final RegistryObject<MenuType<AncientDebrisExtractorMenu>> ANCIENT_DEBRIS_EXTRACTOR =
+        MENUS.register("ancient_debris_extractor", () ->
+            IForgeMenuType.create(AncientDebrisExtractorMenu::new));
 
     public static void register(IEventBus eventBus) {
         MENUS.register(eventBus);

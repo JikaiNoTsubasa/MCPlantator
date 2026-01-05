@@ -2,6 +2,7 @@ package com.mcplantator.init;
 
 import com.mcplantator.MCPlantator;
 import com.mcplantator.blockentity.BotanicalWorkbenchBlockEntity;
+import com.mcplantator.blockentities.AncientDebrisExtractorBlockEntity;
 import com.mcplantator.blockentities.IronExtractorBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -22,6 +23,11 @@ public class ModBlockEntities {
         BLOCK_ENTITIES.register("iron_extractor", () ->
             BlockEntityType.Builder.of(IronExtractorBlockEntity::new,
                 ModBlocks.IRON_EXTRACTOR.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<AncientDebrisExtractorBlockEntity>> ANCIENT_DEBRIS_EXTRACTOR =
+        BLOCK_ENTITIES.register("ancient_debris_extractor", () ->
+            BlockEntityType.Builder.of(AncientDebrisExtractorBlockEntity::new,
+                ModBlocks.ANCIENT_DEBRIS_EXTRACTOR.get()).build(null));
 
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITIES.register(eventBus);

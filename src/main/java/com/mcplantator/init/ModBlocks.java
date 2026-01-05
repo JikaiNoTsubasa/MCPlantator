@@ -1,6 +1,7 @@
 package com.mcplantator.init;
 
 import com.mcplantator.MCPlantator;
+import com.mcplantator.blocks.AncientDebrisExtractorBlock;
 import com.mcplantator.blocks.BotanicalWorkbenchBlock;
 import com.mcplantator.blocks.GunpowderCropBlock;
 import com.mcplantator.blocks.IronExtractorBlock;
@@ -33,6 +34,13 @@ public class ModBlocks {
                     .requiresCorrectToolForDrops()
                     .noOcclusion()));
 
+    // Ancient Debris Extractor
+    public static final RegistryObject<Block> ANCIENT_DEBRIS_EXTRACTOR = BLOCKS.register("ancient_debris_extractor",
+            () -> new AncientDebrisExtractorBlock(BlockBehaviour.Properties.copy(Blocks.NETHERITE_BLOCK)
+                    .strength(50.0F, 1200.0F)
+                    .requiresCorrectToolForDrops()
+                    .noOcclusion()));
+
     // Block items
     public static final RegistryObject<Item> BOTANICAL_WORKBENCH_ITEM =
         ModItems.ITEMS.register("botanical_workbench",
@@ -41,6 +49,10 @@ public class ModBlocks {
     public static final RegistryObject<Item> IRON_EXTRACTOR_ITEM =
         ModItems.ITEMS.register("iron_extractor",
             () -> new BlockItem(IRON_EXTRACTOR.get(), new Item.Properties()));
+
+    public static final RegistryObject<Item> ANCIENT_DEBRIS_EXTRACTOR_ITEM =
+        ModItems.ITEMS.register("ancient_debris_extractor",
+            () -> new BlockItem(ANCIENT_DEBRIS_EXTRACTOR.get(), new Item.Properties()));
 
     public static void register(IEventBus eventBus) {
         BLOCKS.register(eventBus);

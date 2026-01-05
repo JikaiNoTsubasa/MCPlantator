@@ -3,7 +3,9 @@
   "block.mcplantator.gunpowder_crop": "Gunpowder Plant",
   "block.mcplantator.botanical_workbench": "Botanical Workbench",
   "block.mcplantator.iron_extractor": "Iron Extractor",
+  "block.mcplantator.ancient_debris_extractor": "Ancient Debris Extractor",
   "container.mcplantator.botanical_workbench": "Botanical Workbench",
   "container.mcplantator.iron_extractor": "Iron Extractor",
+  "container.mcplantator.ancient_debris_extractor": "Ancient Debris Extractor",
   "itemGroup.mcplantator": "MCPlantator"
 }

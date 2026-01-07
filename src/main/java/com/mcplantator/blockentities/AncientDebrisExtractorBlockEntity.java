@@ -49,7 +49,7 @@ public class AncientDebrisExtractorBlockEntity extends BlockEntity implements Me
     // Processing constants
     private static final int PROCESS_TIME = 200; // 10 seconds (200 ticks)
     private static final int FUEL_VALUE = 1600; // redstone dust gives 1600 ticks (80 seconds, like coal)
-    private static final float DEBRIS_CHANCE = 0.1F; // 10% chance
+    private static final float DEBRIS_CHANCE = 0.01F; // 1% chance
 
     private final ItemStackHandler itemHandler = new ItemStackHandler(TOTAL_SLOTS) {
         @Override

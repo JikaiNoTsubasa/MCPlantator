@@ -37,7 +37,7 @@ public class ModBlocks {
     // Ancient Debris Extractor
     public static final RegistryObject<Block> ANCIENT_DEBRIS_EXTRACTOR = BLOCKS.register("ancient_debris_extractor",
             () -> new AncientDebrisExtractorBlock(BlockBehaviour.Properties.copy(Blocks.NETHERITE_BLOCK)
-                    .strength(50.0F, 1200.0F)
+                    .strength(3.5F)
                     .requiresCorrectToolForDrops()
                     .noOcclusion()));
 

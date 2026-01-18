@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "mcplantator:iron_extractor"
+    "mcplantator:iron_extractor",
+    "mcplantator:ancient_debris_extractor"
   ]
 }

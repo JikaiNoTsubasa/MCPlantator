@@ -2,6 +2,10 @@
   "item.mcplantator.gunpowder_seed": "Graine Poudrière",
   "block.mcplantator.gunpowder_crop": "Poudrier Sauvage",
   "block.mcplantator.botanical_workbench": "Établi Botanique",
+  "block.mcplantator.iron_extractor": "Extracteur de Fer",
+  "block.mcplantator.ancient_debris_extractor": "Extracteur de Débris Antiques",
   "container.mcplantator.botanical_workbench": "Établi Botanique",
+  "container.mcplantator.iron_extractor": "Extracteur de Fer",
+  "container.mcplantator.ancient_debris_extractor": "Extracteur de Débris Antiques",
   "itemGroup.mcplantator": "MCPlantator"
 }
